@@ -3,11 +3,25 @@
 prompt_setup_pygmalion(){
   ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}"
   ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-  ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}⚡%{$reset_color%}"
+  ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}⚡%{$reset_color%}"
   ZSH_THEME_GIT_PROMPT_CLEAN=""
-
-  base_prompt='%{$fg[magenta]%}%n%{$reset_color%}%{$fg[cyan]%}@%{$reset_color%}%{$fg[yellow]%}%m%{$reset_color%}%{$fg[red]%}:%{$reset_color%}%{$fg[cyan]%}%0~%{$reset_color%}%{$fg[red]%}|%{$reset_color%}'
-  post_prompt='%{$fg[cyan]%}⇒%{$reset_color%}  '
+  
+  if [ "$(whoami)" == "$DEFAULT_USERNAME" ]
+  then
+    username="me"
+  else
+    username="%n"
+  fi
+  
+  if [ "$(hostname)" == "$DEFAULT_HOSTNAME" ]
+  then
+    hostname="home"
+  else
+    hostname="%m"
+  fi
+  
+  base_prompt='%{$fg_bold[red]%}$username%{$reset_color%}%{$fg_bold[cyan]%}@%{$reset_color%}%{$fg_bold[green]%}$hostname%{$reset_color%}%{$fg[red]%}:%{$reset_color%}%{$fg[blue]%}%0~%{$reset_color%}'
+  post_prompt='%{$fg_bold[blue]%}»%{$reset_color%} '
 
   base_prompt_nocolor=$(echo "$base_prompt" | perl -pe "s/%\{[^}]+\}//g")
   post_prompt_nocolor=$(echo "$post_prompt" | perl -pe "s/%\{[^}]+\}//g")
@@ -26,7 +40,13 @@ prompt_pygmalion_precmd(){
   if [[ $prompt_length -gt 40 ]]; then
     nl=$'\n%{\r%}';
   fi
-  PROMPT="$base_prompt$gitinfo$nl$post_prompt"
+  
+  local pipe=""
+  if [ $gitinfo ]; then
+    pipe="%{$fg[red]%}|%{$reset_color%}"
+  fi
+  
+  PROMPT="$base_prompt$pipe$gitinfo $nl$post_prompt"
 }
 
 prompt_setup_pygmalion
