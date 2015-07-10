@@ -5,21 +5,21 @@ prompt_setup_pygmalion(){
   ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
   ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg_bold[red]%}⚡%{$reset_color%}"
   ZSH_THEME_GIT_PROMPT_CLEAN=""
-  
-  if [ "$(whoami)" == "$DEFAULT_USERNAME" ]
+
+  if [[ "$(whoami)" == "$DEFAULT_USERNAME" ]]
   then
     username="me"
   else
     username="%n"
   fi
-  
-  if [ "$(hostname)" == "$DEFAULT_HOSTNAME" ]
+
+  if [[ "$(hostname)" == "$DEFAULT_HOSTNAME" ]]
   then
     hostname="home"
   else
     hostname="%m"
   fi
-  
+
   base_prompt='%{$fg_bold[red]%}$username%{$reset_color%}%{$fg_bold[cyan]%}@%{$reset_color%}%{$fg_bold[green]%}$hostname%{$reset_color%}%{$fg[red]%}:%{$reset_color%}%{$fg[blue]%}%0~%{$reset_color%}'
   post_prompt='%{$fg_bold[blue]%}»%{$reset_color%} '
 
@@ -40,15 +40,13 @@ prompt_pygmalion_precmd(){
   if [[ $prompt_length -gt 40 ]]; then
     nl=$'\n%{\r%}';
   fi
-  
+
   local pipe=""
   if [ $gitinfo ]; then
     pipe="%{$fg[red]%}|%{$reset_color%}"
   fi
-  
+
   PROMPT="$base_prompt$pipe$gitinfo $nl$post_prompt"
 }
 
 prompt_setup_pygmalion
-
-
