@@ -21,7 +21,7 @@ function title {
       print -Pn "\e]2;$2:q\a" # set window name
       print -Pn "\e]1;$1:q\a" # set tab name
       ;;
-    screen*)
+    screen*|tmux*)
       print -Pn "\ek$1:q\e\\" # set screen hardstatus
       ;;
     *)
@@ -69,7 +69,7 @@ function omz_termsupport_preexec {
   fi
 
   # cmd name only, or if this is sudo or ssh, the next cmd
-  local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
+  local CMD=${2[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
   title '$CMD' '%100>...>$LINE%<<'
